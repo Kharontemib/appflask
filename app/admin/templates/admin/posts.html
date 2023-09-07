@@ -1,0 +1,35 @@
+{% extends "base_template.html" %}
+
+{% block title %}
+    Listado de posts
+{% endblock %}
+
+{% block content %}
+    <div>
+        <a href="{{ url_for('admin.post_form') }}">Añadir entrada</a>
+    </div>
+    <h2>Listado de entradas</h2>
+    <ul>
+    {% for post in post_pagination %}
+        <li>
+            <a href="{{ url_for('admin.update_post_form', post_id=post.id) }}">{{ post.title }}
+                <span class="postCreated">({{ post.created | datetime }})</span>
+            </a>
+        </li>
+    {% endfor %}
+    </ul>
+
+    <div class=pagination>
+        {%- for page in post_pagination.iter_pages() %}
+            {% if page %}
+                {% if page != post_pagination.page %}
+                    <a href="{{ url_for('admin.list_posts', page=page) }}">{{ page }}</a>
+                {% else %}
+                    <strong>{{ page }}</strong>
+                {% endif %}
+            {% else %}
+                <span class=ellipsis>…</span>
+            {% endif %}
+        {%- endfor %}
+    </div>
+{% endblock %}

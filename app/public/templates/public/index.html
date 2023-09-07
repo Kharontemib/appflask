@@ -1,0 +1,35 @@
+{% extends "base_template.html" %}
+
+{% block title %}Tutorial Flask: Miniblog{% endblock %}
+
+{% block content %}
+    {% if blog_user.is_admin %}
+    <div>
+        <a href="{{ url_for('admin.post_form') }}">Añadir entrada</a>
+    </div>
+    {% endif %}
+    <ul>
+
+    {% for post in post_pagination %}
+        <li><a href="{{ url_for('public.show_post', slug=post.title_slug) }}">{{ post.title }}
+            <span class="postCreated">({{ post.created | datetime }})</span>
+        </a></li>
+     {% else %}    
+     <h2>No hay entradas</h2>
+    {% endfor %}
+    </ul>
+
+    <div class=pagination>
+        {%- for page in post_pagination.iter_pages() %}
+            {% if page %}
+                {% if page != post_pagination.page %}
+                    <a href="{{ url_for('public.index', page=page) }}">{{ page }}</a>
+                {% else %}
+                    <strong>{{ page }}</strong>
+                {% endif %}
+            {% else %}
+                <span class=ellipsis>…</span>
+            {% endif %}
+        {%- endfor %}
+    </div>
+{% endblock %}
